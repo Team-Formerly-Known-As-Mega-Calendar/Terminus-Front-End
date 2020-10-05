@@ -46,6 +46,9 @@ const intro2 = async() => {
 };
 
 const intro3 = async() => {
+    await displayImage.fromURL('https://travel.mqcdn.com/mapquest/travel/wp-content/uploads/2020/05/GettyImages-1158031584-e1592292359511.jpg').then(image => {
+        console.log(image);
+    });
     inquirer
         .prompt([
             {
@@ -55,9 +58,31 @@ const intro3 = async() => {
                 choices: [chalk.bold.white('Ease open the door and walk inside.')]
             }
         ])
-        .then()
+        .then(answer => {
+            answer ? intro4() : null;
+        })
         .catch(error => {
             console.log(error);
         });
 };
 
+const intro4 = async() => {
+    await displayImage.fromURL('https://i.pinimg.com/originals/66/fe/15/66fe15b530102eddc18262a881920485.jpg').then(image => {
+        console.log(image);
+    });
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                message: chalk.green('Inside, it\'s dark and creepy. There\'s a glow coming from the basement.'),
+                name: 'intro3',
+                choices: [chalk.bold.white('Go to the basement')]
+            }
+        ])
+        .then(answer => {
+            answer ? null : null;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
