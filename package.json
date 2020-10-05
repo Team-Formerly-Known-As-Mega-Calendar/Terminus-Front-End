@@ -1,34 +1,36 @@
 {
   "name": "haunted-terminal-game-fe",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3"
-  },
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "jest --verbose --runInBand --testLocationInResults --setupFiles dotenv/config",
+    "test:watch": "npm run test -- --watch",
+    "start": "node -r dotenv/config index.js",
+    "start:watch": "nodemon -r dotenv/config index.js"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "jest": {
+    "testEnvironment": "node"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.11.5",
+    "@babel/plugin-syntax-class-properties": "^7.10.4",
+    "@types/jest": "^26.0.14",
+    "@types/pg": "^7.14.5",
+    "eslint": "^7.10.0",
+    "jest": "^26.5.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "display-image": "^1.1.0",
+    "dotenv": "^8.2.0",
+    "inquirer": "^7.3.3",
+    "path": "^0.12.7",
+    "pg": "^8.4.0",
+    "sound-play": "^1.0.5"
   }
 }
