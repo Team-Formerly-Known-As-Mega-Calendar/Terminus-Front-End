@@ -1,13 +1,17 @@
+/* eslint-disable no-console */
 const inquirer = require('inquirer');
 const displayImage = require('display-image');
 const sound = require('sound-play');
 const path = require('path');
+const validator = require('email-validator');
 const chalk = require('chalk');
+const { request } = require('http');
 
 const start = async() => {
     await displayImage.fromURL('https://www.havenwoodacademy.org/wp-content/uploads/2016/06/what_leads_girls_to_be_targeted_by_bullies-1-1024x536.jpg').then(image => {
         console.log(image);
-    });  inquirer
+    });  
+    inquirer
         .prompt([
             {
                 type: 'list',
@@ -80,9 +84,100 @@ const intro4 = async() => {
             }
         ])
         .then(answer => {
-            answer ? null : null;
+            answer ? intro5() : null;
         })
         .catch(error => {
             console.log(error);
         });
 };
+
+const intro5 = async() => {
+    await displayImage.fromURL('https://static.turbosquid.com/Preview/2019/08/07__04_32_48/screenshot013.png7ED1A127-D677-43E3-9107-710130718E02Default.jpg').then(image => {
+        console.log(image);
+    });
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                message: chalk.green('You see a computer, powered on—its monitor glowing.'),
+                name: 'intro3',
+                choices: [chalk.bold.white('Investigate')]
+            }
+        ])
+        .then(answer => {
+            answer ? intro6() : null;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
+const intro6 = async() => {
+    await displayImage.fromURL('https://networkencyclopedia.com/wp-content/uploads/2020/04/terminal-retro-green.jpg').then(image => {
+        console.log(image); 
+    });
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                message: chalk.green('You see a computer, powered on—its monitor glowing.'),
+                name: 'intro3',
+                choices: [chalk.bold.white('Investigate')]
+            }
+        ])
+        .then(answer => {
+            answer ? signUpPrompt() : null;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
+const signUpInput = [
+    {
+        type: 'input',
+        message: chalk.green('Enter your name:'),
+        name: 'name',
+    },
+    {
+        type: 'input',
+        message: chalk.green('Enter your email:'),
+        name: 'email',
+        validate: function validEmail(email) {
+            if(!validator.validate(email)) {
+                return 'Please enter a valid email.';
+            }
+            else {
+                return true;
+            }
+        }
+    },
+    {
+        type: 'password',
+        name: 'password',
+        message: chalk.green('Please enter password.'),
+        validate: function validPass(pass) {
+            if(pass.length !== 0) {
+                return true;
+            }
+            else {
+                return 'Please enter a valid password.';
+            }
+        }
+    }
+];
+
+const signUpPrompt = () =>
+    inquirer.prompt(signUpInput)
+        .then(answers => {
+            let user = {
+                email: answers.email,
+                password: answers.password,
+                name: answers.name
+            };
+            return request(`${REQUEST_URL}/api/auth/signup`)
+                .send(user)
+                .then(({ body }) => {
+                    user = body;
+                });
+        });
