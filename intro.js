@@ -273,3 +273,22 @@ const storySelect = async() => {
             console.log(error);
         });
 };
+
+const play = async(stageId) => {
+    const response = await fetch(`https://haunted-terminal-game-dev.herokuapp.com/api/v1/stage/${stageId}`);
+    const json = await response.json();
+
+    await displayImage.fromURL(json.img).then(image => {
+        console.log(image);
+    });
+    //sound will go here
+    const answers = await inquirer.prompt([
+        {
+            type: 'list',
+            message: chalk.green(json.message),
+            name: stageId,
+            choices: chalk.bold.white(json.choices.map(choice => ({ name: choice.prompt, value: choice.next })))
+        }
+    ]);
+    return play(answers.stageId);
+};
