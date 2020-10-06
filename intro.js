@@ -11,7 +11,10 @@ const start = async() => {
     await displayImage.fromURL('https://www.havenwoodacademy.org/wp-content/uploads/2016/06/what_leads_girls_to_be_targeted_by_bullies-1-1024x536.jpg').then(image => {
         console.log(image);
     });
-    inquirer
+
+    await sound.play('./sounds/file_example_MP3_700KB.mp3');
+
+    return inquirer
         .prompt([
             {
                 type: 'list',
@@ -34,7 +37,8 @@ const intro2 = async() => {
     await displayImage.fromURL('https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/09/11163558/main-972x597.jpg').then(image => {
         console.log(image);
     });
-    inquirer
+
+    return inquirer
         .prompt([
             {
                 type: 'list',
@@ -243,7 +247,7 @@ const signUpPrompt = () =>
             })
                 .then(res => res.json())
                 .then(answer => {
-                    answer ? storySelect() : null;
+                    return answer ? storySelect() : null;
                 });
         });
 
@@ -251,7 +255,7 @@ const storySelect = async() => {
     await displayImage.fromURL('https://i.imgur.com/hQ0rD12.jpeg').then(image => {
         console.log(image);
     });
-    inquirer
+    return inquirer
         .prompt([
             {
                 type: 'list',
@@ -262,11 +266,11 @@ const storySelect = async() => {
         ])
         .then(answer => {
             if(answer === 'D.O.M.') { 
-                play('dom-start');
+                playStory('dom-start');
             } else if(answer === 'B.R.O.') {
-                play('bro-start');
+                playStory('bro-start');
             } else if(answer === 'Soul') {
-                play('soul-start');
+                playStory('soul-start');
             }
         })
         .catch(error => {
@@ -274,7 +278,7 @@ const storySelect = async() => {
         });
 };
 
-const play = async(stageId) => {
+const playStory = async(stageId) => {
     const response = await fetch(`https://haunted-terminal-game-dev.herokuapp.com/api/v1/stage/${stageId}`);
     const json = await response.json();
 
@@ -290,5 +294,8 @@ const play = async(stageId) => {
             choices: chalk.bold.white(json.choices.map(choice => ({ name: choice.prompt, value: choice.next })))
         }
     ]);
-    return play(answers.stageId);
+    return playStory(answers.stageId);
 };
+
+// const filePath = path.join(__dirname, 'file.mp3');
+// sound.play(filePath);
