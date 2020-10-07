@@ -1,3 +1,5 @@
+/* eslint-disable keyword-spacing */
+/* eslint-disable space-before-function-paren */
 /* eslint-disable no-console */
 const inquirer = require('inquirer');
 const displayImage = require('display-image');
@@ -11,7 +13,10 @@ const start = async () => {
     await displayImage.fromURL('https://www.havenwoodacademy.org/wp-content/uploads/2016/06/what_leads_girls_to_be_targeted_by_bullies-1-1024x536.jpg').then(image => {
         console.log(image);
     });
-    inquirer
+    // const filePath = path.join(__dirname, 'sounds/file_example_MP3_700KB.mp3');
+    // await sound.play(filePath);
+
+    return inquirer
         .prompt([
             {
                 type: 'list',
@@ -34,7 +39,8 @@ const intro2 = async () => {
     await displayImage.fromURL('https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/09/11163558/main-972x597.jpg').then(image => {
         console.log(image);
     });
-    inquirer
+
+    return inquirer
         .prompt([
             {
                 type: 'list',
@@ -242,5 +248,54 @@ const signUpPrompt = () =>
                 body: JSON.stringify(user),
             })
                 .then(res => res.json())
-                .then(console.log);
+                .then(answer => {
+                    return answer ? storySelect() : null;
+                });
         });
+
+const storySelect = async () => {
+    await displayImage.fromURL('https://i.imgur.com/hQ0rD12.jpeg').then(image => {
+        console.log(image);
+    });
+    return inquirer
+        .prompt([
+            {
+                type: 'list',
+                message: chalk.green('Choose a story path'),
+                name: 'storySelect',
+                choices: [({ name: chalk.bold.white('D.O.M.'), value: 'dom-start' }), ({ name: chalk.bold.white('B.R.O.'), value: 'bro-start' }), ({ name: chalk.bold.white('Soul'), value: 'soul-start' })]
+            }
+        ])
+        .then(answer => {
+            return playStage(answer.storySelect);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
+const playStage = async (stageId) => {
+    const response = await fetch(`https://haunted-terminal-game-dev.herokuapp.com/api/v1/stage/${stageId}`);
+    const json = await response.json();
+
+    await displayImage.fromURL(json.img).then(image => {
+        console.log(image);
+    });
+
+    if (json.sound) {
+        const filePath = path.join(__dirname, `sounds/${json.sound}`);
+        await sound.play(filePath);
+    }
+
+    const answers = await inquirer.prompt([
+        {
+            type: 'list',
+            message: chalk.green(json.message),
+            name: 'stageId',
+            choices: json.choices.map(choice => ({ name: chalk.bold.white(choice.prompt), value: choice.next }))
+        }
+    ]);
+    return playStage(answers.stageId);
+};
+
+//playStage('bro-start');
