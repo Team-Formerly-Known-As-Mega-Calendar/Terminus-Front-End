@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint-disable keyword-spacing */
 /* eslint-disable space-before-function-paren */
 /* eslint-disable no-console */
