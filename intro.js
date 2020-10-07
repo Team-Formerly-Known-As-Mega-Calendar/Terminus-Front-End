@@ -278,10 +278,10 @@ const playStage = async (stageId) => {
     const response = await fetch(`https://haunted-terminal-game-dev.herokuapp.com/api/v1/stage/${stageId}`);
     const json = await response.json();
 
-    await displayImage.fromURL(json.img).then(image => {
+    if(json.img) {await displayImage.fromURL(json.img).then(image => {
         console.log(image);
     });
-
+    }
     if (json.sound) {
         const filePath = path.join(__dirname, `sounds/${json.sound}`);
         await sound.play(filePath);
