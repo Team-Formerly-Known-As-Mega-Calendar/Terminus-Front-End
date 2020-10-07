@@ -1,3 +1,5 @@
+/* eslint-disable keyword-spacing */
+/* eslint-disable space-before-function-paren */
 /* eslint-disable no-console */
 const inquirer = require('inquirer');
 const displayImage = require('display-image');
@@ -5,13 +7,16 @@ const sound = require('sound-play');
 const path = require('path');
 const validator = require('email-validator');
 const chalk = require('chalk');
-const { request } = require('http');
+const fetch = require('node-fetch');
 
-const start = async() => {
+const start = async () => {
     await displayImage.fromURL('https://www.havenwoodacademy.org/wp-content/uploads/2016/06/what_leads_girls_to_be_targeted_by_bullies-1-1024x536.jpg').then(image => {
         console.log(image);
-    });  
-    inquirer
+    });
+    // const filePath = path.join(__dirname, 'sounds/file_example_MP3_700KB.mp3');
+    // await sound.play(filePath);
+
+    return inquirer
         .prompt([
             {
                 type: 'list',
@@ -21,7 +26,8 @@ const start = async() => {
             }
         ])
         .then(answer => {
-            answer ? intro2() : null; })
+            answer ? intro2() : null;
+        })
         .catch(error => {
             console.log(error);
         });
@@ -29,11 +35,12 @@ const start = async() => {
 
 start();
 
-const intro2 = async() => {
+const intro2 = async () => {
     await displayImage.fromURL('https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/09/11163558/main-972x597.jpg').then(image => {
         console.log(image);
     });
-    inquirer
+
+    return inquirer
         .prompt([
             {
                 type: 'list',
@@ -43,13 +50,14 @@ const intro2 = async() => {
             }
         ])
         .then(answer => {
-            answer ? intro3() : null;})
+            answer ? intro3() : null;
+        })
         .catch(error => {
             console.log(error);
         });
 };
 
-const intro3 = async() => {
+const intro3 = async () => {
     await displayImage.fromURL('https://travel.mqcdn.com/mapquest/travel/wp-content/uploads/2020/05/GettyImages-1158031584-e1592292359511.jpg').then(image => {
         console.log(image);
     });
@@ -70,7 +78,7 @@ const intro3 = async() => {
         });
 };
 
-const intro4 = async() => {
+const intro4 = async () => {
     await displayImage.fromURL('https://i.pinimg.com/originals/66/fe/15/66fe15b530102eddc18262a881920485.jpg').then(image => {
         console.log(image);
     });
@@ -91,7 +99,7 @@ const intro4 = async() => {
         });
 };
 
-const intro5 = async() => {
+const intro5 = async () => {
     await displayImage.fromURL('https://static.turbosquid.com/Preview/2019/08/07__04_32_48/screenshot013.png7ED1A127-D677-43E3-9107-710130718E02Default.jpg').then(image => {
         console.log(image);
     });
@@ -112,9 +120,9 @@ const intro5 = async() => {
         });
 };
 
-const intro6 = async() => {
+const intro6 = async () => {
     await displayImage.fromURL('https://networkencyclopedia.com/wp-content/uploads/2020/04/terminal-retro-green.jpg').then(image => {
-        console.log(image); 
+        console.log(image);
     });
     inquirer
         .prompt([
@@ -133,9 +141,9 @@ const intro6 = async() => {
         });
 };
 
-const intro7 = async() => {
+const intro7 = async () => {
     await displayImage.fromURL('https://networkencyclopedia.com/wp-content/uploads/2020/04/terminal-retro-green.jpg').then(image => {
-        console.log(image); 
+        console.log(image);
     });
     inquirer
         .prompt([
@@ -154,9 +162,9 @@ const intro7 = async() => {
         });
 };
 
-const intro8 = async() => {
+const intro8 = async () => {
     await displayImage.fromURL('https://networkencyclopedia.com/wp-content/uploads/2020/04/terminal-retro-green.jpg').then(image => {
-        console.log(image); 
+        console.log(image);
     });
     inquirer
         .prompt([
@@ -175,9 +183,9 @@ const intro8 = async() => {
         });
 };
 
-const intro9 = async() => {
+const intro9 = async () => {
     await displayImage.fromURL('https://networkencyclopedia.com/wp-content/uploads/2020/04/terminal-retro-green.jpg').then(image => {
-        console.log(image); 
+        console.log(image);
     });
     inquirer
         .prompt([
@@ -199,15 +207,10 @@ const intro9 = async() => {
 const signUpInput = [
     {
         type: 'input',
-        message: chalk.green('Enter your name:'),
-        name: 'name',
-    },
-    {
-        type: 'input',
         message: chalk.green('Enter your email:'),
         name: 'email',
         validate: function validEmail(email) {
-            if(!validator.validate(email)) {
+            if (!validator.validate(email)) {
                 return 'Please enter a valid email.';
             }
             else {
@@ -220,7 +223,7 @@ const signUpInput = [
         name: 'password',
         message: chalk.green('Please enter password.'),
         validate: function validPass(pass) {
-            if(pass.length !== 0) {
+            if (pass.length !== 0) {
                 return true;
             }
             else {
@@ -233,14 +236,75 @@ const signUpInput = [
 const signUpPrompt = () =>
     inquirer.prompt(signUpInput)
         .then(answers => {
-            let user = {
+            const user = {
                 email: answers.email,
-                password: answers.password,
-                name: answers.name
+                password: answers.password
             };
-            return request(`${REQUEST_URL}/api/auth/signup`)
-                .send(user)
-                .then(({ body }) => {
-                    user = body;
+            return fetch('https://haunted-terminal-game-dev.herokuapp.com/api/v1/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(user),
+            })
+                .then(res => res.json())
+                .then(answer => {
+                    return answer ? storySelect() : null;
                 });
         });
+
+const storySelect = async () => {
+    await displayImage.fromURL('https://i.imgur.com/hQ0rD12.jpeg').then(image => {
+        console.log(image);
+    });
+    return inquirer
+        .prompt([
+            {
+                type: 'list',
+                message: chalk.green('Choose a story path'),
+                name: 'storySelect',
+                choices: [chalk.bold.white('D.O.M.'), chalk.bold.white('B.R.O.'), chalk.bold.white('Soul')]
+            }
+        ])
+        .then(answer => {
+            //ask Ryan about bug here
+            console.log({ answer });
+            
+            if (answer === 'D.O.M.') {
+                playStage('dom-start');
+            } else if (answer === 'B.R.O.') {
+                playStage('bro-start');
+            } else if (answer === 'Soul') {
+                playStage('soul-start');
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
+const playStage = async (stageId) => {
+    const response = await fetch(`https://haunted-terminal-game-dev.herokuapp.com/api/v1/stage/${stageId}`);
+    const json = await response.json();
+
+    await displayImage.fromURL(json.img).then(image => {
+        console.log(image);
+    });
+
+    if (json.sound) {
+        const filePath = path.join(__dirname, `sounds/${json.sound}`);
+        await sound.play(filePath);
+    }
+
+    const answers = await inquirer.prompt([
+        {
+            type: 'list',
+            message: chalk.green(json.message),
+            name: 'stageId',
+            choices: json.choices.map(choice => ({ name: chalk.bold.white(choice.prompt), value: choice.next }))
+        }
+    ]);
+    return playStage(answers.stageId);
+};
+
+//playStage('bro-start');
