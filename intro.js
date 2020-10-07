@@ -1,3 +1,5 @@
+/* eslint-disable keyword-spacing */
+/* eslint-disable space-before-function-paren */
 /* eslint-disable no-console */
 const inquirer = require('inquirer');
 const displayImage = require('display-image');
@@ -11,8 +13,8 @@ const start = async () => {
     await displayImage.fromURL('https://www.havenwoodacademy.org/wp-content/uploads/2016/06/what_leads_girls_to_be_targeted_by_bullies-1-1024x536.jpg').then(image => {
         console.log(image);
     });
-    const filePath = path.join(__dirname, 'sounds/file_example_MP3_700KB.mp3');
-    await sound.play(filePath);
+    // const filePath = path.join(__dirname, 'sounds/file_example_MP3_700KB.mp3');
+    // await sound.play(filePath);
 
     return inquirer
         .prompt([
@@ -265,12 +267,15 @@ const storySelect = async () => {
             }
         ])
         .then(answer => {
+            //ask Ryan about bug here
+            console.log({ answer });
+            
             if (answer === 'D.O.M.') {
-                playStory('dom-start');
+                playStage('dom-start');
             } else if (answer === 'B.R.O.') {
-                playStory('bro-start');
+                playStage('bro-start');
             } else if (answer === 'Soul') {
-                playStory('soul-start');
+                playStage('soul-start');
             }
         })
         .catch(error => {
@@ -278,24 +283,28 @@ const storySelect = async () => {
         });
 };
 
-const playStory = async (stageId) => {
+const playStage = async (stageId) => {
     const response = await fetch(`https://haunted-terminal-game-dev.herokuapp.com/api/v1/stage/${stageId}`);
     const json = await response.json();
 
     await displayImage.fromURL(json.img).then(image => {
         console.log(image);
     });
-    //sound will go here
+
+    if (json.sound) {
+        const filePath = path.join(__dirname, `sounds/${json.sound}`);
+        await sound.play(filePath);
+    }
+
     const answers = await inquirer.prompt([
         {
             type: 'list',
             message: chalk.green(json.message),
-            name: stageId,
-            choices: chalk.bold.white(json.choices.map(choice => ({ name: choice.prompt, value: choice.next })))
+            name: 'stageId',
+            choices: json.choices.map(choice => ({ name: chalk.bold.white(choice.prompt), value: choice.next }))
         }
     ]);
-    return playStory(answers.stageId);
+    return playStage(answers.stageId);
 };
 
-// const filePath = path.join(__dirname, 'file.mp3');
-// sound.play(filePath);
+//playStage('bro-start');
