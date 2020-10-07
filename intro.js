@@ -263,19 +263,19 @@ const storySelect = async () => {
                 type: 'list',
                 message: chalk.green('Choose a story path'),
                 name: 'storySelect',
-                choices: [chalk.bold.white('D.O.M.'), chalk.bold.white('B.R.O.'), chalk.bold.white('Soul')]
+                choices: [('D.O.M.'), ('B.R.O.'), ('Soul')]
             }
         ])
         .then(answer => {
             //ask Ryan about bug here
-            console.log({ answer });
+            console.log(answer);
             
-            if (answer === 'D.O.M.') {
-                playStage('dom-start');
-            } else if (answer === 'B.R.O.') {
-                playStage('bro-start');
-            } else if (answer === 'Soul') {
-                playStage('soul-start');
+            if (answer.storySelect === 'D.O.M.') {
+                return playStage('dom-start');
+            } else if (answer.storySelect === 'B.R.O.') {
+                return playStage('bro-start');
+            } else if (answer.storySelect === 'Soul') {
+                return playStage('soul-start');
             }
         })
         .catch(error => {
