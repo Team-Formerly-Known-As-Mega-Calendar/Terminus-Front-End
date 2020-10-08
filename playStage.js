@@ -6,10 +6,10 @@ const inquirer = require('inquirer');
 const displayImage = require('display-image');
 const sound = require('sound-play');
 const path = require('path');
-const validator = require('email-validator');
 const chalk = require('chalk');
 const request = require('superagent');
 const agent = request.agent();
+const validator = require('email-validator');
 
 const authInput = [
     {
@@ -77,7 +77,7 @@ const playStage = async (stageId) => {
     const response = await agent.get(`https://haunted-terminal-game-dev.herokuapp.com/api/v1/stage/${stageId}`);
     const json = response.body;
 
-    if (json.img) {
+    if (json.img && process.env.TERM_PROGRAM !== 'mintty') {
         await displayImage.fromURL(json.img).then(image => {
             console.log(image);
         });
