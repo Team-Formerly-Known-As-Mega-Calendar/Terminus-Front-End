@@ -47,7 +47,7 @@ const signUpPrompt = () =>
                 email: answers.email,
                 password: answers.password
             };
-            return agent.post('https://haunted-terminal-game-dev.herokuapp.com/api/v1/auth/signup')
+            return agent.post('https://haunted-terminal-game-main.herokuapp.com/api/v1/auth/signup')
                 .send(user)
                 .then(answer => {
                     return answer ? playStage('intro-7') : null;
@@ -62,7 +62,7 @@ const loginPrompt = () =>
                 email: answers.email,
                 password: answers.password
             };
-            return agent.post('https://haunted-terminal-game-dev.herokuapp.com/api/v1/auth/login')
+            return agent.post('https://haunted-terminal-game-main.herokuapp.com/api/v1/auth/login')
                 .send(user)
                 .then(answer => {
                     return answer ? playStage('intro-7') : null;
@@ -74,7 +74,7 @@ const loginPrompt = () =>
         });
 
 const playStage = async (stageId) => {
-    const response = await agent.get(`https://haunted-terminal-game-dev.herokuapp.com/api/v1/stage/${stageId}`);
+    const response = await agent.get(`https://haunted-terminal-game-main.herokuapp.com/api/v1/stage/${stageId}`);
     const json = response.body;
 
     if (json.img && process.env.TERM_PROGRAM !== 'mintty') {
