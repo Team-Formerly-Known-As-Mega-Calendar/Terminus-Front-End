@@ -4,18 +4,19 @@
 /* eslint-disable no-console */
 const inquirer = require('inquirer');
 const displayImage = require('display-image');
-const sound = require('sound-play');
+// const sound = require('sound-play');
 const path = require('path');
 const validator = require('email-validator');
 const chalk = require('chalk');
-const fetch = require('node-fetch');
+const request = require('superagent');
+const agent = request.agent();
 
 const start = async () => {
     await displayImage.fromURL('https://www.havenwoodacademy.org/wp-content/uploads/2016/06/what_leads_girls_to_be_targeted_by_bullies-1-1024x536.jpg').then(image => {
         console.log(image);
     });
-    const filePath = path.join(__dirname, 'sounds/Spooked');
-    await sound.play(filePath);
+    // const filePath = path.join(__dirname, 'sounds/Spooked');
+    // await sound.play(filePath);
 
     return inquirer
         .prompt([
@@ -34,7 +35,7 @@ const start = async () => {
         });
 };
 
-start();
+// start();
 
 const intro2 = async () => {
     await displayImage.fromURL('https://d3vhc53cl8e8km.cloudfront.net/hello-staging/wp-content/uploads/2017/09/11163558/main-972x597.jpg').then(image => {
@@ -205,7 +206,7 @@ const intro9 = async () => {
         });
 };
 
-const signUpInput = [
+const authInput = [
     {
         type: 'input',
         message: chalk.green('Enter your email:'),
@@ -235,24 +236,39 @@ const signUpInput = [
 ];
 
 const signUpPrompt = () =>
-    inquirer.prompt(signUpInput)
+    inquirer.prompt(authInput)
         .then(answers => {
             const user = {
                 email: answers.email,
                 password: answers.password
             };
-            return fetch('https://haunted-terminal-game-dev.herokuapp.com/api/v1/auth/signup', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(user),
-            })
-                .then(res => res.json())
+            return agent.post('https://haunted-terminal-game-dev.herokuapp.com/api/v1/auth/signup')
+                .send(user)
                 .then(answer => {
                     return answer ? storySelect() : null;
+                })
+                .catch(console.log);
+        });
+
+const loginPrompt = () =>
+    inquirer.prompt(authInput)
+        .then(answers => {
+            const user = {
+                email: answers.email,
+                password: answers.password
+            };
+            return agent.post('https://haunted-terminal-game-dev.herokuapp.com/api/v1/auth/login')
+                .send(user)
+                .then(answer => {
+                    return answer ? storySelect() : null;
+                })
+                .catch(error => {
+                    console.log(chalk.bold.red(error.response.body.message));
+                    return loginPrompt();
                 });
         });
+
+loginPrompt();
 
 const storySelect = async () => {
     await displayImage.fromURL('https://i.imgur.com/hQ0rD12.jpeg').then(image => {
@@ -274,21 +290,21 @@ const storySelect = async () => {
             console.log(error);
         });
 };
-
+        
 const playStage = async (stageId) => {
-    const response = await fetch(`https://haunted-terminal-game-dev.herokuapp.com/api/v1/stage/${stageId}`);
-    const json = await response.json();
-
+    const response = await agent.get(`https://haunted-terminal-game-dev.herokuapp.com/api/v1/stage/${stageId}`);
+    const json = response.body;
+            
     if (json.img) {
         await displayImage.fromURL(json.img).then(image => {
             console.log(image);
         });
     }
-    if (json.sound) {
-        const filePath = path.join(__dirname, `sounds/${json.sound}`);
-        await sound.play(filePath);
-    }
-
+    // if (json.sound) {
+    //     const filePath = path.join(__dirname, `sounds/${json.sound}`);
+    //     await sound.play(filePath);
+    // }
+                
     const answers = await inquirer.prompt([
         {
             type: 'list',
@@ -304,4 +320,5 @@ const playStage = async (stageId) => {
     } else {
         return playStage(answers.stageId);
     }
+    //add exceptions for signup and login
 };
