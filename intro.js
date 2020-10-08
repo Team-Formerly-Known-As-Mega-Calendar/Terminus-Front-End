@@ -14,7 +14,8 @@ const start = async () => {
     await displayImage.fromURL('https://www.havenwoodacademy.org/wp-content/uploads/2016/06/what_leads_girls_to_be_targeted_by_bullies-1-1024x536.jpg').then(image => {
         console.log(image);
     });
-    const filePath = path.join(__dirname, 'sounds/Spooked');
+    const filePath = path.join(__dirname, 'sounds/Spooked.mp3');
+    console.log(filePath);
     await sound.play(filePath);
 
     return inquirer
