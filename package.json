@@ -1,8 +1,9 @@
 {
-  "name": "haunted-terminal-game-fe",
-  "version": "1.0.0",
+  "name": "terminus-test",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
+  "bin": "./playStage.js",
   "scripts": {
     "test": "jest --verbose --runInBand --testLocationInResults --setupFiles dotenv/config",
     "test:watch": "npm run test -- --watch",
@@ -21,7 +22,7 @@
     "@types/jest": "^26.0.14",
     "@types/pg": "^7.14.5",
     "eslint": "^7.10.0",
-    "jest": "^26.5.0",
+    "jest": "^26.5.2",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
@@ -33,6 +34,8 @@
     "node-fetch": "^2.6.1",
     "path": "^0.12.7",
     "pg": "^8.4.0",
-    "sound-play": "^1.0.5"
+    "sound-play": "^1.0.5",
+    "superagent": "^6.1.0",
+    "supertest": "^5.0.0"
   }
 }
