@@ -69,7 +69,7 @@ const loginPrompt = () =>
                 })
                 .catch(error => {
                     console.log(chalk.bold.red(error.response.body.message));
-                    return loginPrompt();
+                    return playStage('intro-6');
                 });
         });
 

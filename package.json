@@ -1,9 +1,9 @@
 {
-  "name": "terminus-game",
-  "version": "1.0.0",
+  "name": "terminus-test",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
-  "bin": "./intro.js",
+  "bin": "./playStage.js",
   "scripts": {
     "test": "jest --verbose --runInBand --testLocationInResults --setupFiles dotenv/config",
     "test:watch": "npm run test -- --watch",
