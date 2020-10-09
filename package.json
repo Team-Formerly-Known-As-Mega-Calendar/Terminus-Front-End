@@ -1,6 +1,6 @@
 {
   "name": "terminus-game",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "bin": "./playStage.js",
@@ -35,6 +35,7 @@
     "path": "^0.12.7",
     "pg": "^8.4.0",
     "sound-play": "^1.0.5",
+    "sound-play-terminus": "^1.0.0",
     "superagent": "^6.1.0",
     "supertest": "^5.0.0"
   }
